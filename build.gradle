@@ -29,6 +29,7 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile("org.springframework:spring-messaging")
+    compile("org.projectlombok:lombok:1.16.6")
     testCompile("junit:junit")
 }
 

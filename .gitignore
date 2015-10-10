@@ -1,6 +1,10 @@
 .gradle
 .project
-gradle/
+.classpath
+.settings/
 gradlew*
+gradle/
 /bin/
 bower_components/
+bower_components/
+
