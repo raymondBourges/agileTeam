@@ -1,0 +1,12 @@
+{
+  "name": "pponws",
+  "version": "0.0.0",
+  "authors": [
+    "Raymond Bourges <raymond.bourges@orange.fr>"
+  ],
+  "license": "APACHE 2",
+  "dependencies": {
+    "sockjs-client": "~1.0.3",
+    "stomp-websocket": "~2.3.4"
+  }
+}
