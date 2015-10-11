@@ -1,67 +1,64 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Hello WebSocket</title>
-    <script src="bower_components/sockjs-client/dist/sockjs-0.3.4.min.js"></script>
-    <script src="bower_components/stomp-websocket/lib/stomp.min.js"></script>
-    <script type="text/javascript">
-        var stompClient = null;
-
-        function setConnected(connected) {
-            document.getElementById('connect').disabled = connected;
-            document.getElementById('disconnect').disabled = !connected;
-            document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
-            document.getElementById('response').innerHTML = '';
-        }
-
-        function connect() {
-            var socket = new SockJS('/pponws');
-            stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
-                setConnected(true);
-                console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/team', function(team){
-                    console.log(team);
-                    show(team.body);
-                });
-            });
-        }
-
-        function disconnect() {
-            if (stompClient != null) {
-                stompClient.disconnect();
+    <head>
+        <title>Test Websockets pour alimenter un graphique</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script type="text/javascript" src="smoothie.js"></script>
+        <script language="javascript" type="text/javascript">
+            var wsUri = getRootUri() + "/pponws?teamName=gfc";
+            
+            function getRootUri() {
+                return "ws://" + (document.location.hostname == "" ?
+                    "localhost" : document.location.hostname) + ":" +
+                    (document.location.port == "" ? "8080" : document.location.port);
             }
-            setConnected(false);
-            console.log("Disconnected");
-        }
 
-        function sendName() {
-            var name = document.getElementById('name').value;
-            stompClient.send("/stomp/teamInfo", {}, JSON.stringify({ 'teamName': name }));
-        }
+            function init() {
+                messageDiv = document.getElementById("messageDivId");
 
-        function show(message) {
-            var response = document.getElementById('response');
-            var p = document.createElement('p');
-            p.style.wordWrap = 'break-word';
-            p.appendChild(document.createTextNode(message));
-            response.appendChild(p);
-        }
-    </script>
-</head>
-<body onload="disconnect()">
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
-<div>
-    <div>
-        <button id="connect" onclick="connect();">Connect</button>
-        <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
-    </div>
-    <div id="conversationDiv">
-        <label>Team?</label><input type="text" id="name" />
-        <button id="sendName" onclick="sendName();">Send</button>
-        <p id="response"></p>
-    </div>
-</div>
-</body>
+                websocket = new WebSocket(wsUri);
+
+                websocket.onopen = function(evt) {
+                    onOpen(evt)
+                };
+               
+                websocket.onmessage = function(evt) {
+                    onMessage(evt)
+                };
+               
+                websocket.onerror = function(evt) {
+                    onError(evt)
+                };
+
+            }
+
+            function onOpen(evt) {
+                afficher("CONNECTE");
+            }
+
+            function onMessage(evt) {
+                afficher("RECU : " + evt.data);
+            }
+
+            function onError(evt) {
+                afficher('<span style="color: red;">ERREUR:</span> ' + evt.data);
+            }
+
+            function afficher(message) {
+                var ligne = document.createElement("p");
+                ligne.innerHTML = message;
+                messageDiv.innerHTML = ligne.innerHTML ;
+            }
+
+            window.addEventListener("load", init, false);
+
+        </script>
+    </head>
+    <body>
+        <div>Evolution de la valeur</div>
+        <canvas id="graphCanvas" width="400" height="100"></canvas>
+        <div id="messageDivId"></div>
+    </body>
 </html>
+

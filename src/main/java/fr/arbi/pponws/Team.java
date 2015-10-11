@@ -8,6 +8,11 @@ import lombok.Getter;
 public class Team {
     
     private HashMap<String, DeveloperInfo> developerInfos = new HashMap<>();
+    private String name;
+    
+    public Team(String name) {
+        this.name = name;
+    }
 
     public void removeDeloper(String devName) {
         developerInfos.remove(devName);

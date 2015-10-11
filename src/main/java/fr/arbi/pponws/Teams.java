@@ -12,7 +12,7 @@ public class Teams {
     Team getTeam(String teamName) {
         Team ret = teams.get(teamName);
         if (ret == null) {
-            ret = new Team();
+            ret = new Team(teamName);
             teams.put(teamName, ret);
         }
         return ret;
