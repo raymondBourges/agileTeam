@@ -1,9 +1,9 @@
 (function () {
     'use strict';
     angular.module('agileTeam', ['ngWebSocket'])
-        .factory('Ws', function($websocket) {
+        .factory('Ws', function($websocket, $location) {
             // Open a WebSocket connection
-            var ws = $websocket('ws://localhost:8080/team?teamName=gfc');
+            var ws = $websocket('ws://' + $location.host() + ':' + $location.port() + '/team?teamName=gfc');
 
             var message = {data: {}};
 
