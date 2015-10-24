@@ -1,11 +1,11 @@
-package fr.arbi.pponws.support;
+package fr.arbi.at.support;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import fr.arbi.pponws.Teams;
-import fr.arbi.pponws.WsEndPoint;
+import fr.arbi.at.Teams;
+import fr.arbi.at.WsEndPoint;
 
 @Configuration
 public class ApplicationConfig {

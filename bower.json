@@ -6,8 +6,6 @@
   ],
   "license": "APACHE 2",
   "dependencies": {
-    "angular": "~1.4.7",
-    "sockjs-client": "~1.0.3",
-    "stomp-websocket": "~2.3.4"
+    "angular-websocket": "~1.0.14"
   }
 }

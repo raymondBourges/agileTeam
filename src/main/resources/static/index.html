@@ -1,64 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="agileTeam">
     <head>
-        <title>Test Websockets pour alimenter un graphique</title>
+        <title>Agile Team</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width">
-        <script type="text/javascript" src="smoothie.js"></script>
-        <script language="javascript" type="text/javascript">
-            var wsUri = getRootUri() + "/pponws?teamName=gfc";
-            
-            function getRootUri() {
-                return "ws://" + (document.location.hostname == "" ?
-                    "localhost" : document.location.hostname) + ":" +
-                    (document.location.port == "" ? "8080" : document.location.port);
-            }
-
-            function init() {
-                messageDiv = document.getElementById("messageDivId");
-
-                websocket = new WebSocket(wsUri);
-
-                websocket.onopen = function(evt) {
-                    onOpen(evt)
-                };
-               
-                websocket.onmessage = function(evt) {
-                    onMessage(evt)
-                };
-               
-                websocket.onerror = function(evt) {
-                    onError(evt)
-                };
-
-            }
-
-            function onOpen(evt) {
-                afficher("CONNECTE");
-            }
-
-            function onMessage(evt) {
-                afficher("RECU : " + evt.data);
-            }
-
-            function onError(evt) {
-                afficher('<span style="color: red;">ERREUR:</span> ' + evt.data);
-            }
-
-            function afficher(message) {
-                var ligne = document.createElement("p");
-                ligne.innerHTML = message;
-                messageDiv.innerHTML = ligne.innerHTML ;
-            }
-
-            window.addEventListener("load", init, false);
-
-        </script>
+      <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+      <script type="text/javascript" src="bower_components/angular-websocket/dist/angular-websocket.js"></script>
+      <script type="text/javascript" src="app/app.js"></script>
     </head>
-    <body>
-        <div>Evolution de la valeur</div>
-        <canvas id="graphCanvas" width="400" height="100"></canvas>
-        <div id="messageDivId"></div>
+    <body ng-controller="MainController as ctrl">
+        <h1>H1</h1>
+        <ul>
+          <li ng-repeat="data in ctrl.message.collection track by $index">
+            {{ data }}
+          </li>
+        </ul>
+        message: {{ctrl.test}}
     </body>
 </html>
 

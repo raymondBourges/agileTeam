@@ -1,7 +1,6 @@
-package fr.arbi.pponws;
+package fr.arbi.at;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -15,7 +14,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/pponws")
+@ServerEndpoint("/team")
 public class WsEndPoint {
     private static final Logger logger = Logger.getLogger(WsEndPoint.class.getName());
     static Queue<Session> queue = new ConcurrentLinkedQueue<>();

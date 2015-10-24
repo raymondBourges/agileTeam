@@ -1,4 +1,4 @@
-package fr.arbi.pponws;
+package fr.arbi.at;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.SendTo;

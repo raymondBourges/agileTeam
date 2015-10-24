@@ -1,4 +1,4 @@
-package fr.arbi.pponws;
+package fr.arbi.at;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
