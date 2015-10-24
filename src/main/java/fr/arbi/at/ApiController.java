@@ -1,7 +1,14 @@
 package fr.arbi.at;
 
+import java.io.IOException;
+import java.net.URI;
+
+import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +21,15 @@ public class ApiController {
     
     @Autowired
     Teams teams;
+    
+    @Autowired
+    JsonService jsonService;
+
+    private WebSocketContainer container;
+    
+    public ApiController() {
+        this.container = ContainerProvider.getWebSocketContainer();
+    }
     
     @RequestMapping(value="/{teamName}", method=RequestMethod.GET)
     Team getTeam(@PathVariable String teamName) {
@@ -28,7 +44,14 @@ public class ApiController {
     @RequestMapping(value="/{teamName}/{devName}", method=RequestMethod.PUT)
     DeveloperInfo updateDeveloper(@PathVariable String teamName, @PathVariable String devName, @RequestBody DeveloperInfo developerInfo) {
         DeveloperInfo ret = teams.getTeam(teamName).updateDeveloperinfo(devName, developerInfo);
-        WsEndPoint.send(teams.getTeam(teamName));
+        try {
+            Session session = container.connectToServer(ClientEndPoint.class,
+                URI.create("ws://localhost:8080/team"));
+            session.getBasicRemote().sendText(jsonService.teamAsJson(teams.getTeam(teamName)));
+            session.close();
+        } catch (IOException | DeploymentException e) {
+            new RuntimeException(e);
+        }
         return ret;
     }
     

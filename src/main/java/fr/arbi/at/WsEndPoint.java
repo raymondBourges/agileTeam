@@ -10,55 +10,48 @@ import java.util.logging.Logger;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
+import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ServerEndpoint("/team")
 public class WsEndPoint {
     private static final Logger logger = Logger.getLogger(WsEndPoint.class.getName());
-    static Queue<Session> queue = new ConcurrentLinkedQueue<>();
-    
-    public static void send(Team team) {
+    static Queue<Session> clients = new ConcurrentLinkedQueue<>();
+    ObjectMapper mapper = new ObjectMapper();
+
+    @OnMessage
+    public void onMessage(String message, Session session) {
         try {
-            for (Session session : queue) {
-                Map<String,List<String>> requestParams = session.getRequestParameterMap();
+            Team team = mapper.readValue(message, Team.class);
+            for (Session client : clients) {
+                Map<String,List<String>> requestParams = client.getRequestParameterMap();
                 if (requestParams != null && requestParams.get("teamName") != null && requestParams.get("teamName").get(0).equals(team.getName())) {
-                    session.getBasicRemote().sendText(teamAsJson(team));                    
+                    client.getBasicRemote().sendText(message);                    
                 }
             }
         } catch (IOException e) {
             logger.log(Level.WARNING, e.toString());
-        }
+        }        
     }
-
+    
     @OnOpen
     public void open(Session session) {
-        queue.add(session);
+        clients.add(session);
     }
 
     @OnClose
     public void close(Session session) {
-        queue.remove(session);
+        clients.remove(session);
     }
 
     @OnError
     public void error(Session session, Throwable t) {
-        queue.remove(session);
+        clients.remove(session);
     }
     
-    private static String teamAsJson(Team team) {
-        ObjectMapper mapper = new ObjectMapper();
-        String ret = "";
-        try {
-            ret = mapper.writeValueAsString(team);
-        } catch (JsonProcessingException e) {
-            new RuntimeException(e);
-        }
-        return ret;
-    }
 }
 
