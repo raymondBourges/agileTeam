@@ -1,18 +1,18 @@
 (function () {
     'use strict';
     angular.module('agileTeam', ['ngWebSocket'])
-        .factory('Messages', function($websocket) {
+        .factory('Ws', function($websocket) {
             // Open a WebSocket connection
             var ws = $websocket('ws://localhost:8080/team?teamName=gfc');
 
-            var collection = [];
+            var message = {data: {}};
 
-            ws.onMessage(function(message) {
-                collection.push(JSON.parse(message.data));
+            ws.onMessage(function(mess) {
+                message.data = JSON.parse(mess.data);
             });
 
             return {
-                collection: collection,
+                message: message,
                 status: function() {
                     return ws.readyState;
                 }
@@ -22,11 +22,11 @@
 
     MainController.$inject = [
         '$scope',
-        'Messages'
+        'Ws'
         ];
-    function MainController ($scope, Messages) {
+    function MainController ($scope, Ws) {
         var vm = this;
         vm.test = "ICI";
-        vm.messages = Messages;
+        vm.ws = Ws;
     }
 })();
