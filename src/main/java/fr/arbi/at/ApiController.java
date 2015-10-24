@@ -3,6 +3,7 @@ package fr.arbi.at;
 import java.io.IOException;
 import java.net.URI;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
@@ -42,11 +43,11 @@ public class ApiController {
     }
 
     @RequestMapping(value="/{teamName}/{devName}", method=RequestMethod.PUT)
-    DeveloperInfo updateDeveloper(@PathVariable String teamName, @PathVariable String devName, @RequestBody DeveloperInfo developerInfo) {
+    DeveloperInfo updateDeveloper(@PathVariable String teamName, @PathVariable String devName, @RequestBody DeveloperInfo developerInfo, HttpServletRequest req) {
         DeveloperInfo ret = teams.getTeam(teamName).updateDeveloperinfo(devName, developerInfo);
         try {
             Session session = container.connectToServer(ClientEndPoint.class,
-                URI.create("ws://localhost:8080/team"));
+                URI.create(String.format("ws://%s:%d/team", req.getServerName(), req.getServerPort())));
             session.getBasicRemote().sendText(jsonService.teamAsJson(teams.getTeam(teamName)));
             session.close();
         } catch (IOException | DeploymentException e) {
