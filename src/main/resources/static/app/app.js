@@ -1,36 +1,32 @@
 (function () {
     'use strict';
     angular.module('agileTeam', ['ngWebSocket'])
-        .factory('MyData', function($websocket) {
+        .factory('Messages', function($websocket) {
             // Open a WebSocket connection
-            var dataStream = $websocket('ws://localhost:8080/team?teamName=gfc');
+            var ws = $websocket('ws://localhost:8080/team?teamName=gfc');
 
             var collection = [];
 
-            dataStream.onMessage(function(message) {
-                //collection.push(JSON.parse(message.data));
-                collection.push(message.data);
-            }, {autoApply: false});
+            ws.onMessage(function(message) {
+                collection.push(JSON.parse(message.data));
+            });
 
-            var methods = {
+            return {
                 collection: collection,
-                get: function() {
-                    dataStream.send(JSON.stringify({ action: 'get' }));
+                status: function() {
+                    return ws.readyState;
                 }
             };
-
-            return methods;
         })
         .controller('MainController', MainController);
 
     MainController.$inject = [
         '$scope',
-        'MyData'
+        'Messages'
         ];
-    function MainController ($scope, MyData) {
+    function MainController ($scope, Messages) {
         var vm = this;
         vm.test = "ICI";
-
-            $scope.message = "ICI";//MyData;
+        vm.messages = Messages;
     }
 })();

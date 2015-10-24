@@ -14,6 +14,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @ServerEndpoint("/team")
 public class WsEndPoint {
     private static final Logger logger = Logger.getLogger(WsEndPoint.class.getName());
@@ -24,7 +27,7 @@ public class WsEndPoint {
             for (Session session : queue) {
                 Map<String,List<String>> requestParams = session.getRequestParameterMap();
                 if (requestParams != null && requestParams.get("teamName") != null && requestParams.get("teamName").get(0).equals(team.getName())) {
-                    session.getBasicRemote().sendText("TODO: Encode " + team.getName());                    
+                    session.getBasicRemote().sendText(teamAsJson(team));                    
                 }
             }
         } catch (IOException e) {
@@ -45,6 +48,17 @@ public class WsEndPoint {
     @OnError
     public void error(Session session, Throwable t) {
         queue.remove(session);
+    }
+    
+    private static String teamAsJson(Team team) {
+        ObjectMapper mapper = new ObjectMapper();
+        String ret = "";
+        try {
+            ret = mapper.writeValueAsString(team);
+        } catch (JsonProcessingException e) {
+            new RuntimeException(e);
+        }
+        return ret;
     }
 }
 
