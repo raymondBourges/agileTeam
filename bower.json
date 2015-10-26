@@ -6,6 +6,7 @@
   ],
   "license": "APACHE 2",
   "dependencies": {
+    "angular-route": "~1.4.7",
     "angular-websocket": "~1.0.14"
   }
 }

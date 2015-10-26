@@ -1,9 +1,9 @@
 (function () {
     'use strict';
-    angular.module('agileTeam', ['ngWebSocket'])
+    angular.module('agileTeam', ['ngWebSocket', 'ngRoute', 'wipController'])
         .factory('Ws', function($websocket, $location) {
             // Open a WebSocket connection
-            var ws = $websocket('ws://' + $location.host() + ':' + $location.port() + '/team?teamName=gfc');
+            var ws = $websocket('ws://' + $location.host() + ':' + /*$location.port()*/8080 + '/team?teamName=gfc');
 
             var message = {data: {}};
 
@@ -18,15 +18,20 @@
                 }
             };
         })
-        .controller('MainController', MainController);
-
-    MainController.$inject = [
-        '$scope',
-        'Ws'
-        ];
-    function MainController ($scope, Ws) {
-        var vm = this;
-        vm.test = "ICI";
-        vm.ws = Ws;
-    }
+        .config(
+            function($routeProvider) {
+                $routeProvider.
+                    when('/wip', {
+                        templateUrl: 'partials/wip.html',
+                        controller: 'WipCtrl',
+                        controllerAs: 'ctrl'
+                    }).
+                    when('/:team/:dev', {
+                        templateUrl: 'partials/pp.html',
+                        controller: 'ppCtrl'
+                    }).
+                    otherwise({
+                        redirectTo: '/wip'
+                    });
+            });
 })();

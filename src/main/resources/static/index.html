@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html ng-app="agileTeam">
-    <head>
-        <title>Agile Team</title>
-        <meta charset="UTF-8">
-      <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-      <script type="text/javascript" src="bower_components/angular-websocket/dist/angular-websocket.js"></script>
-      <script type="text/javascript" src="app/app.js"></script>
-    </head>
-    <body ng-controller="MainController as ctrl">
-        <h1>H1</h1>
-        <ul>
-          <li ng-repeat="data in ctrl.message.collection track by $index">
-            {{ data }}
-          </li>
-        </ul>
-        message: {{ctrl.test}} / {{ctrl.ws.message.data}} / {{ctrl.ws.status()}}
-    </body>
+  <head>
+    <title>Agile Team</title>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular-websocket/dist/angular-websocket.js"></script>
+    <script type="text/javascript" src="app/app.js"></script>
+    <script type="text/javascript" src="app/wip/wipController.js"></script>
+  </head>
+  <body>
+    <div ng-view></div>
+  </body>
 </html>
 
