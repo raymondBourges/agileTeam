@@ -2,17 +2,24 @@
     'use strict';
 
     angular
-        .module('ppController', [])
+        .module('ppController', [
+            'ngWebSocket'
+        ])
         .controller('PpCtrl', PpCtrl);
 
     PpCtrl.$inject = [
-        '$scope',
-        'Ws',
-        '$routeParams'
+        '$routeParams',
+        '$websocket',
+        '$location'
     ];
-    function PpCtrl($scope, Ws, $routeParams) {
+    function PpCtrl($routeParams, $websocket, $location) {
         var vm = this;
-        vm.team = $routeParams.team;
-        vm.dev = $routeParams.dev;
+        vm.message = {data: {}};
+
+        //WebSocket
+        var ws = $websocket('ws://' + $location.host() + ':' + /*$location.port()*/8080 + '/team?teamName=' + $routeParams.team);
+        ws.onMessage(function(mess) {
+            vm.message.data = JSON.parse(mess.data);
+        });
     }
 })();

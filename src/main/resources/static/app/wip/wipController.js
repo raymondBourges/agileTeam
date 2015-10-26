@@ -8,11 +8,11 @@
         .controller('WipCtrl', WipCtrl);
 
     WipCtrl.$inject = [
-        '$scope',
+        '$routeParams',
         '$websocket',
         '$location'
     ];
-    function WipCtrl($scope, $websocket, $location) {
+    function WipCtrl($routeParams, $websocket, $location) {
         var vm = this;
         vm.test = "ICI";
         vm.message = {data: {}};
