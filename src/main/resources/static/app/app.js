@@ -1,6 +1,12 @@
 (function () {
     'use strict';
-    angular.module('agileTeam', ['ngWebSocket', 'ngRoute', 'wipController'])
+    angular.module('agileTeam',
+        [
+            'ngWebSocket',
+            'ngRoute',
+            'wipController',
+            'ppController'
+        ])
         .factory('Ws', function($websocket, $location) {
             // Open a WebSocket connection
             var ws = $websocket('ws://' + $location.host() + ':' + /*$location.port()*/8080 + '/team?teamName=gfc');
@@ -22,13 +28,14 @@
             function($routeProvider) {
                 $routeProvider.
                     when('/wip', {
-                        templateUrl: 'partials/wip.html',
+                        templateUrl: 'app/wip/wip.html',
                         controller: 'WipCtrl',
                         controllerAs: 'ctrl'
                     }).
                     when('/:team/:dev', {
-                        templateUrl: 'partials/pp.html',
-                        controller: 'ppCtrl'
+                        templateUrl: 'app/pp/pp.html',
+                        controller: 'PpCtrl',
+                        controllerAs: 'ctrl'
                     }).
                     otherwise({
                         redirectTo: '/wip'
