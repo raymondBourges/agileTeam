@@ -5,7 +5,8 @@
             'ngWebSocket',
             'ngRoute',
             'wipController',
-            'ppController'
+            'ppController',
+            'homeController'
         ])
         .factory('Ws', function($websocket, $location) {
             // Open a WebSocket connection
@@ -27,6 +28,11 @@
         .config(
             function($routeProvider) {
                 $routeProvider.
+                    when('/', {
+                        templateUrl: 'app/home/home.html',
+                        controller: 'HomeCtrl',
+                        controllerAs: 'ctrl'
+                    }).
                     when('/wip', {
                         templateUrl: 'app/wip/wip.html',
                         controller: 'WipCtrl',
@@ -38,7 +44,7 @@
                         controllerAs: 'ctrl'
                     }).
                     otherwise({
-                        redirectTo: '/wip'
+                        redirectTo: '/'
                     });
             });
 })();
