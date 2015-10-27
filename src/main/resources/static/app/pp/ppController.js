@@ -3,23 +3,29 @@
 
     angular
         .module('ppController', [
-            'ngWebSocket'
+            'ngWebSocket',
+            'apiService'
         ])
         .controller('PpCtrl', PpCtrl);
 
     PpCtrl.$inject = [
         '$routeParams',
-        '$websocket',
-        '$location'
+        'apiService'
     ];
-    function PpCtrl($routeParams, $websocket, $location) {
+    function PpCtrl($routeParams, apiService) {
         var vm = this;
         vm.message = {data: {}};
 
         //WebSocket
-        var ws = $websocket('ws://' + $location.host() + ':' + /*$location.port()*/8080 + '/team?teamName=' + $routeParams.team);
+        var ws = apiService.getWs($routeParams.team);
         ws.onMessage(function(mess) {
             vm.message.data = JSON.parse(mess.data);
         });
+
+        init();
+
+        function init() {
+            apiService.sendDev($routeParams.team, $routeParams.dev, false, -1);
+        }
     }
 })();
