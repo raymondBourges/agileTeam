@@ -18,6 +18,8 @@
         vm.getDevs = getDevs;
         vm.getTeam = getTeam;
         vm.vote = vote;
+        vm.getNbVotes = getNbVotes;
+        vm.isVoteMax = isVoteMax;
 
         //WebSocket
         var ws = apiService.getWs($routeParams.team);
@@ -45,6 +47,23 @@
             apiService.sendDev($routeParams.team, $routeParams.dev, true, choice);
         }
 
+        function getNbVotes(choice) {
+            var ret = "?";
+            if (getTeam().allVoted) {
+                ret = getTeam().votes[choice];
+            }
+            return ret;
+        }
+
+        function isVoteMax(choice) {
+            var ret = true;
+            for(var vote in getTeam().votes) {
+                var nbVote = getTeam().votes[vote];
+                ret = ret && nbVote <= getTeam().votes[choice];
+            };
+            return ret;
+        }
+
         function parseDev(dev) {
             dev.isMe = false;
             if (dev.name == $routeParams.dev) {
@@ -55,8 +74,13 @@
 
         function parseTeam(team) {
             team.allVoted = true;
+            team.votes = {};
+            team.choices.forEach(function(choice) {
+                team.votes[choice] = 0;
+            });
             team.developers.forEach(function(dev) {
                 team.allVoted = team.allVoted && dev.voted;
+                team.votes[dev.vote]++;
             });
             return team;
         }

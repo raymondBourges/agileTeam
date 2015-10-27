@@ -18,7 +18,15 @@
     <tfoot>
       <tr ng-class="{success: ctrl.getTeam().allVoted, danger: !ctrl.getTeam().allVoted}">
         <td>{{ctrl.getTeam().name}}</td>
-        <td>vote</td>
+        <td>
+          <span ng-repeat="choice in ctrl.getTeam().choices | orderBy">
+            <input class="btn btn-default"
+                   type="button"
+                   value="{{ctrl.getNbVotes(choice)}}"
+                   ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
+                   ng-disabled="true">
+          </span>
+        </td>
       </tr>
     </tfoot>
   </table>
