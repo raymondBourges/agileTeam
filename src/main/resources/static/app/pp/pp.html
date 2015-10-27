@@ -1,20 +1,14 @@
 <div>
   <table class="table table-hover">
-    <thead>
-      <tr>
-        <td>dev</td>
-        <td>vote</td>
-      </tr>
-    </thead>
     <tbody>
       <tr ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">
         <td>{{dev.name}}</td>
         <td>
-          <span ng-repeat="choice in ctrl.getChoices() | orderBy">
+          <span ng-repeat="choice in ctrl.getTeam().choices | orderBy">
             <input class="btn btn-default"
                    type="button"
                    value="{{choice}}"
-                   ng-class="{'btn-success': (dev.voted || dev.isMe) && dev.vote==choice}"
+                   ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
                    ng-disabled="!dev.isMe"
                    ng-click="ctrl.vote(choice)">
           </span>
@@ -22,8 +16,8 @@
       </tr>
     </tbody>
     <tfoot>
-      <tr ng-class="{danger: true}">
-        <td>team</td>
+      <tr ng-class="{success: ctrl.getTeam().allVoted, danger: !ctrl.getTeam().allVoted}">
+        <td>{{ctrl.getTeam().name}}</td>
         <td>vote</td>
       </tr>
     </tfoot>

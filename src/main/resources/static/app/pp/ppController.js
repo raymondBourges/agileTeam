@@ -16,14 +16,15 @@
         var vm = this;
         vm.message = {data: {}};
         vm.getDevs = getDevs;
-        vm.getChoices = getChoices;
+        vm.getTeam = getTeam;
         vm.vote = vote;
 
         //WebSocket
         var ws = apiService.getWs($routeParams.team);
         ws.onMessage(function(mess) {
             vm.message.data = JSON.parse(mess.data);
-            getDevs().map(inpectDev);
+            getDevs().map(parseDev);
+            parseTeam(getTeam());
         });
 
         init();
@@ -36,20 +37,28 @@
             return vm.message.data.developers;
         }
 
-        function getChoices() {
-            return vm.message.data.choices;
+        function getTeam() {
+            return vm.message.data;
         }
 
         function vote(choice) {
             apiService.sendDev($routeParams.team, $routeParams.dev, true, choice);
         }
 
-        function inpectDev(dev) {
+        function parseDev(dev) {
             dev.isMe = false;
             if (dev.name == $routeParams.dev) {
                 dev.isMe = true;
             }
             return dev;
+        }
+
+        function parseTeam(team) {
+            team.allVoted = true;
+            team.developers.forEach(function(dev) {
+                team.allVoted = team.allVoted && dev.voted;
+            });
+            return team;
         }
     }
 })();
