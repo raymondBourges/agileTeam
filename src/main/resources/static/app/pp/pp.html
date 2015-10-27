@@ -3,21 +3,27 @@
     <thead>
       <tr>
         <td>dev</td>
-        <td>voted</td>
         <td>vote</td>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">
         <td>{{dev.name}}</td>
-        <td>{{dev.voted}}</td>
-        <td>{{dev.vote}}</td>
+        <td>
+          <span ng-repeat="choice in ctrl.getChoices() | orderBy">
+            <input class="btn btn-default"
+                   type="button"
+                   value="{{choice}}"
+                   ng-class="{'btn-success': (dev.voted || dev.isMe) && dev.vote==choice}"
+                   ng-disabled="!dev.isMe"
+                   ng-click="ctrl.vote(choice)">
+          </span>
+        </td>
       </tr>
     </tbody>
     <tfoot>
       <tr ng-class="{danger: true}">
         <td>team</td>
-        <td>voted</td>
         <td>vote</td>
       </tr>
     </tfoot>
