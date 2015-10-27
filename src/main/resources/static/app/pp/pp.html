@@ -4,14 +4,16 @@
       <tr ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">
         <td>{{dev.name}}</td>
         <td>
-          <span ng-repeat="choice in ctrl.getTeam().choices | orderBy">
-            <input class="btn btn-default"
-                   type="button"
-                   value="{{choice}}"
-                   ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
-                   ng-disabled="!dev.isMe"
-                   ng-click="ctrl.vote(choice)">
-          </span>
+          <div class="row">
+            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices | orderBy">
+              <input class="btn btn-default"
+                     type="button"
+                     value="{{choice}}"
+                     ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
+                     ng-disabled="!dev.isMe"
+                     ng-click="ctrl.vote(choice)"/>
+            </div>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -19,13 +21,15 @@
       <tr ng-class="{success: ctrl.getTeam().allVoted, danger: !ctrl.getTeam().allVoted}">
         <td>{{ctrl.getTeam().name}}</td>
         <td>
-          <span ng-repeat="choice in ctrl.getTeam().choices | orderBy">
-            <input class="btn btn-default"
-                   type="button"
-                   value="{{ctrl.getNbVotes(choice)}}"
-                   ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
-                   ng-disabled="true">
-          </span>
+          <div class="row">
+            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices | orderBy">
+              <input class="btn btn-default"
+                     type="button"
+                     value="{{ctrl.getNbVotes(choice)}}"
+                     ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
+                     ng-disabled="true">
+            </div>
+          </div>
         </td>
       </tr>
     </tfoot>
