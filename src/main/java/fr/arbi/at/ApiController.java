@@ -38,15 +38,21 @@ public class ApiController {
     }
 
     @RequestMapping(value="/{teamName}/{devName}", method=RequestMethod.DELETE)
-    void removeDeveloper(@PathVariable String teamName, @PathVariable String devName) {
+    void removeDeveloper(@PathVariable String teamName, @PathVariable String devName, HttpServletRequest req) {
         Developer dev = Developer.builder().name(devName).build();
         teams.getTeam(teamName).removeDeloper(dev);
+        updateTeanForWs(teamName, req);
     }
 
     @RequestMapping(value="/{teamName}/{devName}", method=RequestMethod.PUT)
     Developer updateDeveloper(@PathVariable String teamName, @PathVariable String devName, @RequestBody Developer developer, HttpServletRequest req) {
         developer.setName(devName);
         Developer ret = teams.getTeam(teamName).updateDeveloper(developer);
+        updateTeanForWs(teamName, req);
+        return ret;
+    }
+
+    private void updateTeanForWs(String teamName, HttpServletRequest req) {
         try {
             Session session = container.connectToServer(ClientEndPoint.class,
                 URI.create(String.format("ws://%s:%d/team", req.getServerName(), req.getServerPort())));
@@ -55,7 +61,6 @@ public class ApiController {
         } catch (IOException | DeploymentException e) {
             new RuntimeException(e);
         }
-        return ret;
     }
     
 }

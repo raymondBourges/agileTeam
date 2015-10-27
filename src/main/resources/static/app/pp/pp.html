@@ -2,16 +2,25 @@
   <table class="table table-hover">
     <tbody>
       <tr ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">
-        <td>{{dev.name}}</td>
+        <td>
+          <div>
+            {{dev.name}}
+            <button type="button"
+                    class="btn btn-danger btn-sm"
+                    ng-click="ctrl.deleteDev(dev)">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+          </div>
+        </td>
         <td>
           <div class="row">
             <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices | orderBy">
-              <input class="btn btn-default"
-                     type="button"
-                     value="{{choice}}"
-                     ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
-                     ng-disabled="!dev.isMe"
-                     ng-click="ctrl.vote(choice)"/>
+              <button type="button"
+                      class="btn btn-default"
+                      ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
+                      ng-disabled="!dev.isMe"
+                      ng-click="ctrl.vote(choice)">{{choice}}
+              </button>
             </div>
           </div>
         </td>
@@ -23,11 +32,11 @@
         <td>
           <div class="row">
             <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices | orderBy">
-              <input class="btn btn-default"
-                     type="button"
-                     value="{{ctrl.getNbVotes(choice)}}"
-                     ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
-                     ng-disabled="true">
+              <button type="button"
+                      class="btn btn-default"
+                      ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
+                      ng-disabled="true">{{ctrl.getNbVotes(choice)}}
+              </button>
             </div>
           </div>
         </td>

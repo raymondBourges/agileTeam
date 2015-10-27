@@ -14,6 +14,7 @@
     function apiService($http, $websocket, $location) {
         var srv = this;
         srv.sendDev = sendDev;
+        srv.deleteDev = deleteDev;
         srv.getWs = getWs;
 
         var baseUrl = "://"
@@ -24,13 +25,17 @@
         var baseHttpUrl = $location.protocol() + baseUrl + "api/v1/";
         var baseWsUrl = "ws" + baseUrl + "team?teamName=";
 
-        function sendDev(team, dev, voted, vote) {
+        function sendDev(teamName, devName, voted, vote) {
             var data = {
-                name: dev,
+                name: devName,
                 voted: voted,
                 vote: vote
             };
-            $http.put(baseHttpUrl + team + "/" + dev, data)
+            $http.put(baseHttpUrl + teamName + "/" + devName, data)
+        }
+
+        function deleteDev(teamName, devName) {
+            $http.delete(baseHttpUrl + teamName + "/" + devName)
         }
 
         function getWs(team) {

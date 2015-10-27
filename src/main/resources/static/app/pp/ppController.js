@@ -18,6 +18,7 @@
         vm.getDevs = getDevs;
         vm.getTeam = getTeam;
         vm.vote = vote;
+        vm.deleteDev = deleteDev;
         vm.getNbVotes = getNbVotes;
         vm.isVoteMax = isVoteMax;
 
@@ -45,6 +46,10 @@
 
         function vote(choice) {
             apiService.sendDev($routeParams.team, $routeParams.dev, true, choice);
+        }
+
+        function deleteDev(dev) {
+            apiService.deleteDev(getTeam().name, dev.name)
         }
 
         function getNbVotes(choice) {
