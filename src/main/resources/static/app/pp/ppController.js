@@ -15,6 +15,7 @@
     function PpCtrl($routeParams, apiService) {
         var vm = this;
         vm.message = {data: {}};
+        vm.getDevs = getDevs;
 
         //WebSocket
         var ws = apiService.getWs($routeParams.team);
@@ -26,6 +27,10 @@
 
         function init() {
             apiService.sendDev($routeParams.team, $routeParams.dev, false, -1);
+        }
+
+        function getDevs() {
+            return vm.message.data.developers;
         }
     }
 })();

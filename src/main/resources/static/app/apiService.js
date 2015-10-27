@@ -26,6 +26,7 @@
 
         function sendDev(team, dev, voted, vote) {
             var data = {
+                name: dev,
                 voted: voted,
                 vote: vote
             };

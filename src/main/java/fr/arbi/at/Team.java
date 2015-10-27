@@ -1,6 +1,7 @@
 package fr.arbi.at;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,21 +13,25 @@ import lombok.Setter;
 @Setter
 public class Team {
     
-    private HashMap<String, DeveloperInfo> developerInfos = new HashMap<>();
+    private Set<Developer> developers = new HashSet<Developer>();
     private String name;
+    private int[] choices = {1, 2, 3, 5, 8, 13, 21, 34};
     
     @JsonCreator
     public Team(@JsonProperty("name") String name) {
         this.name = name;
     }
 
-    public void removeDeloper(String devName) {
-        developerInfos.remove(devName);
+    public void removeDeloper(Developer developer) {
+        developers.remove(developer);
     }
 
-    public DeveloperInfo updateDeveloperinfo(String devName, DeveloperInfo developerInfo) {
-        developerInfos.put(devName, developerInfo);
-        return developerInfos.get(devName);
+    public Developer updateDeveloper(Developer developer) {
+        if(!developers.add(developer)) {
+            developers.remove(developer);
+            developers.add(developer);
+        }
+        return developer;
     }
 
 }

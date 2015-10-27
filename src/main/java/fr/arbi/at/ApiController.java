@@ -39,12 +39,14 @@ public class ApiController {
 
     @RequestMapping(value="/{teamName}/{devName}", method=RequestMethod.DELETE)
     void removeDeveloper(@PathVariable String teamName, @PathVariable String devName) {
-        teams.getTeam(teamName).removeDeloper(devName);
+        Developer dev = Developer.builder().name(devName).build();
+        teams.getTeam(teamName).removeDeloper(dev);
     }
 
     @RequestMapping(value="/{teamName}/{devName}", method=RequestMethod.PUT)
-    DeveloperInfo updateDeveloper(@PathVariable String teamName, @PathVariable String devName, @RequestBody DeveloperInfo developerInfo, HttpServletRequest req) {
-        DeveloperInfo ret = teams.getTeam(teamName).updateDeveloperinfo(devName, developerInfo);
+    Developer updateDeveloper(@PathVariable String teamName, @PathVariable String devName, @RequestBody Developer developer, HttpServletRequest req) {
+        developer.setName(devName);
+        Developer ret = teams.getTeam(teamName).updateDeveloper(developer);
         try {
             Session session = container.connectToServer(ClientEndPoint.class,
                 URI.create(String.format("ws://%s:%d/team", req.getServerName(), req.getServerPort())));
