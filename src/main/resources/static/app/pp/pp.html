@@ -1,4 +1,5 @@
 <div>
+  <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
   <table class="table table-hover">
     <tbody>
       <tr ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">

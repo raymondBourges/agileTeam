@@ -4,15 +4,17 @@
     angular
         .module('ppController', [
             'ngWebSocket',
-            'apiService'
+            'apiService',
+            'timer'
         ])
         .controller('PpCtrl', PpCtrl);
 
     PpCtrl.$inject = [
         '$routeParams',
-        'apiService'
+        'apiService',
+        '$scope'
     ];
-    function PpCtrl($routeParams, apiService) {
+    function PpCtrl($routeParams, apiService, $scope) {
         var vm = this;
         vm.message = {data: {}};
         vm.getDevs = getDevs;
@@ -57,6 +59,7 @@
         }
 
         function cleanVotes() {
+            $scope.$broadcast('timer-start');
             apiService.cleanVotes(getTeam().name)
         }
 
