@@ -51,6 +51,18 @@ public class ApiController {
         updateTeanForWs(teamName, req);
         return ret;
     }
+    
+    @RequestMapping(value="/{teamName}/clean-votes", method=RequestMethod.POST)
+    void cleanVotes(@PathVariable String teamName, HttpServletRequest req) {
+        teams.getTeam(teamName).cleanVotes();
+        updateTeanForWs(teamName, req);
+    }
+
+    @RequestMapping(value="/{teamName}/set-choices", method=RequestMethod.POST)
+    void setChoices(@PathVariable String teamName, @RequestBody String[] choices, HttpServletRequest req) {
+        teams.getTeam(teamName).setChoices(choices);
+        updateTeanForWs(teamName, req);
+    }
 
     private void updateTeanForWs(String teamName, HttpServletRequest req) {
         try {

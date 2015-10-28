@@ -9,14 +9,14 @@ import lombok.Setter;
 public class Developer {
     
     private String name;
-    private Integer vote;
+    private String vote;
     private Boolean voted;
 
     public Developer() {
     }
 
     @Builder
-    public Developer(String name, Integer vote, Boolean voted) {
+    public Developer(String name, String vote, Boolean voted) {
         this.name = name;
         this.vote = vote;
         this.voted = voted;

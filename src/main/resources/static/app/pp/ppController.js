@@ -21,6 +21,9 @@
         vm.deleteDev = deleteDev;
         vm.getNbVotes = getNbVotes;
         vm.isVoteMax = isVoteMax;
+        vm.cleanVotes = cleanVotes;
+        vm.setChoices = setChoices;
+        vm.choisesAsString = "";
 
         //WebSocket
         var ws = apiService.getWs($routeParams.team);
@@ -28,6 +31,7 @@
             vm.message.data = JSON.parse(mess.data);
             getDevs().map(parseDev);
             parseTeam(getTeam());
+            vm.choisesAsString = getTeam().choices.join('|');
         });
 
         init();
@@ -52,6 +56,14 @@
             apiService.deleteDev(getTeam().name, dev.name)
         }
 
+        function cleanVotes() {
+            apiService.cleanVotes(getTeam().name)
+        }
+
+        function setChoices() {
+            apiService.setChoices(getTeam().name, vm.choisesAsString.split("|"))
+        }
+
         function getNbVotes(choice) {
             var ret = "?";
             if (getTeam().allVoted) {
@@ -65,7 +77,7 @@
             for(var vote in getTeam().votes) {
                 var nbVote = getTeam().votes[vote];
                 ret = ret && nbVote <= getTeam().votes[choice];
-            };
+            }
             return ret;
         }
 

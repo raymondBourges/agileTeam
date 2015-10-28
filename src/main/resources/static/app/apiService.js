@@ -15,6 +15,8 @@
         var srv = this;
         srv.sendDev = sendDev;
         srv.deleteDev = deleteDev;
+        srv.cleanVotes = cleanVotes;
+        srv.setChoices = setChoices;
         srv.getWs = getWs;
 
         var baseUrl = "://"
@@ -36,6 +38,14 @@
 
         function deleteDev(teamName, devName) {
             $http.delete(baseHttpUrl + teamName + "/" + devName)
+        }
+
+        function cleanVotes(teamName) {
+            $http.post(baseHttpUrl + teamName + "/clean-votes")
+        }
+
+        function setChoices(teamName, choices) {
+            $http.post(baseHttpUrl + teamName + "/set-choices", choices)
         }
 
         function getWs(team) {

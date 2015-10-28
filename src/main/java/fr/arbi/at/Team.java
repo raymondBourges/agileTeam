@@ -15,7 +15,7 @@ public class Team {
     
     private Set<Developer> developers = new HashSet<Developer>();
     private String name;
-    private int[] choices = {1, 2, 3, 5, 8, 13, 21, 34};
+    private String[] choices = {"1", "2", "3", "5", "8", "13", "21", "34"};
     
     @JsonCreator
     public Team(@JsonProperty("name") String name) {
@@ -32,6 +32,13 @@ public class Team {
             developers.add(developer);
         }
         return developer;
+    }
+
+    public void cleanVotes() {
+        for (Developer developer : developers) {
+            developer.setVote(null);
+            developer.setVoted(false);
+        }
     }
 
 }

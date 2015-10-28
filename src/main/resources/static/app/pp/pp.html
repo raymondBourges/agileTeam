@@ -6,7 +6,7 @@
           <div>
             {{dev.name}}
             <button type="button"
-                    class="btn btn-danger btn-sm"
+                    class="btn btn-default btn-sm"
                     ng-click="ctrl.deleteDev(dev)">
               <span class="glyphicon glyphicon-remove"></span>
             </button>
@@ -14,7 +14,7 @@
         </td>
         <td>
           <div class="row">
-            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices | orderBy">
+            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices">
               <button type="button"
                       class="btn btn-default"
                       ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
@@ -28,10 +28,20 @@
     </tbody>
     <tfoot>
       <tr ng-class="{success: ctrl.getTeam().allVoted, danger: !ctrl.getTeam().allVoted}">
-        <td>{{ctrl.getTeam().name}}</td>
+        <td>{{ctrl.getTeam().name}}
+          <button type="button"
+                  class="btn btn-default btn-sm"
+                  ng-click="ctrl.cleanVotes()">
+            <span class="glyphicon glyphicon-refresh"></span>
+          </button>
+          <button type="button"
+                  class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-cog"></span>
+          </button>
+        </td>
         <td>
           <div class="row">
-            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices | orderBy">
+            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices">
               <button type="button"
                       class="btn btn-default"
                       ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
@@ -43,4 +53,12 @@
       </tr>
     </tfoot>
   </table>
+  <form ng-submit="ctrl.setChoices()">
+    <input type="text"
+            ng-model="ctrl.choisesAsString"/>
+    <button type="submit">
+      <span class="glyphicon glyphicon-ok"></span>
+    </button>
+  </form>
+  </div>
 </div>
