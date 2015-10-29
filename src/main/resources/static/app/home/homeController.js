@@ -11,15 +11,20 @@
     function HomeCtrl($location) {
         var vm = this;
         vm.model = {
-            team:"test",
-            dev:"dev"
+            team:"",
+            dev:""
         };
         vm.go = go;
+        vm.isFormOk = isFormOk;
 
         function go() {
-            if (vm.model.team && vm.model.dev) {
+            if (isFormOk()  ) {
                 $location.path(vm.model.team + "/" + vm.model.dev);
             }
+        }
+
+        function isFormOk() {
+            return vm.model.team.length > 0 && vm.model.dev.length > 0
         }
 
     }
