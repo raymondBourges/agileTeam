@@ -1,35 +1,36 @@
-<div>
+<div class="pp">
   <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
-  <table class="table table-hover">
-    <tbody>
-      <tr ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">
-        <td>
-          <div>
-            {{dev.name}}
-            <button type="button"
-                    class="btn btn-default btn-sm"
-                    ng-click="ctrl.deleteDev(dev)">
-              <span class="glyphicon glyphicon-remove"></span>
-            </button>
-          </div>
-        </td>
-        <td>
-          <div class="row">
-            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices">
-              <button type="button"
-                      class="btn btn-default"
-                      ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
-                      ng-disabled="!dev.isMe"
-                      ng-click="ctrl.vote(choice)">{{choice}}
-              </button>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr ng-class="{success: ctrl.getTeam().allVoted, danger: !ctrl.getTeam().allVoted}">
-        <td>{{ctrl.getTeam().name}}
+  <div class="row" ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">
+    <div class="col-md-2">
+      <div class="row">
+        <div class="col-lg-6">{{dev.name}}</div>
+        <div class="col-lg-6">
+          <button type="button"
+                  class="btn btn-default btn-sm"
+                  ng-click="ctrl.deleteDev(dev)">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices">
+          <button type="button"
+                  class="btn btn-default"
+                  ng-class="{'btn-success': (ctrl.getTeam().allVoted || dev.isMe) && dev.vote==choice}"
+                  ng-disabled="!dev.isMe"
+                  ng-click="ctrl.vote(choice)">{{choice}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-class="{success: ctrl.getTeam().allVoted, danger: !ctrl.getTeam().allVoted}">
+    <div class="col-md-2">
+      <div class="row">
+        <div class="col-lg-6">{{ctrl.getTeam().name}}</div>
+        <div class="col-lg-6">
           <button type="button"
                   class="btn btn-default btn-sm"
                   ng-click="ctrl.cleanVotes()">
@@ -41,29 +42,34 @@
                   ng-click="ctrl.showConfig()">
             <span class="glyphicon glyphicon-cog"></span>
           </button>
-        </td>
-        <td>
-          <div class="row">
-            <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices">
-              <button type="button"
-                      class="btn btn-default"
-                      ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
-                      ng-disabled="true">{{ctrl.getNbVotes(choice)}}
-              </button>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-  <form ng-submit="ctrl.setChoices()" ng-show="ctrl.isConfingVisible">
-    <input type="text"
-           id="conf"
-           ng-model="ctrl.choisesAsString"
-           autofocus/>
-    <button type="submit">
-      <span class="glyphicon glyphicon-ok"></span>
-    </button>
-  </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-1" ng-repeat="choice in ctrl.getTeam().choices">
+          <button type="button"
+                  class="btn btn-default"
+                  ng-class="{'btn-success': ctrl.isVoteMax(choice)}"
+                  ng-disabled="true">{{ctrl.getNbVotes(choice)}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-show="ctrl.isConfingVisible">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+      <form ng-submit="ctrl.setChoices()">
+        <span class="glyphicon glyphicon-cog"></span>:
+        <input type="text"
+               id="conf"
+               ng-model="ctrl.choisesAsString"
+               autofocus/>
+        <button type="submit">
+          <span class="glyphicon glyphicon-ok"></span>
+        </button>
+      </form>
+    </div>
   </div>
 </div>

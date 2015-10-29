@@ -7,3 +7,17 @@
     padding-bottom: 600px;
 }
 
+.pp > .row {
+    padding: 20px;
+    border-top: solid;
+    border-width: thin;
+    border-color: black;
+}
+
+div .pp > .danger {
+    background-color: #F2DEDE;
+}
+
+div .pp > .success {
+    background-color: #DFF0D8;
+}
