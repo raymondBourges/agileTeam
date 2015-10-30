@@ -1,5 +1,7 @@
 # Planning Poker
 Websocket for live planning poker sessions
+
+WARNING: Not works with Firefox at this time. Tested with Chrome.
 ## Use case
 The beatles want to choose the color of a submarine for the title of one of their songs.
 
