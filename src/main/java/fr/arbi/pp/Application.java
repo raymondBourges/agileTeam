@@ -1,4 +1,4 @@
-package fr.arbi.at;
+package fr.arbi.pp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

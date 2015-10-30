@@ -1,4 +1,4 @@
-# pponws
+# Planning Poker
 ## Configuration
 gradle wrapper
 bower install

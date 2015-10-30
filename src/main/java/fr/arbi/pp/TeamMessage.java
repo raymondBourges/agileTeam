@@ -1,4 +1,4 @@
-package fr.arbi.at;
+package fr.arbi.pp;
 
 import lombok.Getter;
 

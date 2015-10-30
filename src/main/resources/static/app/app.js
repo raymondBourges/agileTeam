@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    angular.module('agileTeam',
+    angular.module('planningPoker',
         [
             'ngWebSocket',
             'ngRoute',

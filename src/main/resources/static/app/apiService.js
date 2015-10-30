@@ -21,8 +21,8 @@
 
         var baseUrl = "://"
             + $location.host() + ':'
-//            + $location.port()
-            + 8080
+            + $location.port()
+//            + 8080
             + "/";
         var baseHttpUrl = $location.protocol() + baseUrl + "api/v1/";
         var baseWsUrl = "ws" + baseUrl + "team?teamName=";

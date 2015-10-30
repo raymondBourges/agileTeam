@@ -1,12 +1,12 @@
-package fr.arbi.at.support;
+package fr.arbi.pp.support;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import fr.arbi.at.JsonService;
-import fr.arbi.at.Teams;
-import fr.arbi.at.WsEndPoint;
+import fr.arbi.pp.JsonService;
+import fr.arbi.pp.Teams;
+import fr.arbi.pp.WsEndPoint;
 
 @Configuration
 public class ApplicationConfig {
