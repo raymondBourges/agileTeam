@@ -1,5 +1,9 @@
 <div class="pp">
-  <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h1><timer interval="1000">{{mminutes}}:{{sseconds}}</timer></h1>
+    </div>
+  </div>
   <div class="row" ng-repeat="dev in ctrl.getDevs() | orderBy:'name'" ng-class="{success: dev.voted, danger: !dev.voted}">
     <div class="col-md-2">
       <div class="row">

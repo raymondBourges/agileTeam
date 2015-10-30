@@ -59,7 +59,6 @@
         }
 
         function cleanVotes() {
-            $scope.$broadcast('timer-start');
             apiService.cleanVotes(getTeam().name)
         }
 
@@ -103,6 +102,12 @@
                 team.allVoted = team.allVoted && dev.voted;
                 team.votes[dev.vote]++;
             });
+            if (team.lastAction != 'UPDATE_DEV') {
+                $scope.$broadcast('timer-start');
+            }
+            if (team.allVoted) {
+                $scope.$broadcast('timer-stop');
+            }
             return team;
         }
     }
