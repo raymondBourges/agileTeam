@@ -21,3 +21,8 @@ div .pp > .danger {
 div .pp > .success {
     background-color: #DFF0D8;
 }
+
+#config {
+    border-top: none;
+    padding-top: 0px;
+}

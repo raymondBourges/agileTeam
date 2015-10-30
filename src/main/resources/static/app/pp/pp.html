@@ -38,8 +38,8 @@
           </button>
           <button type="button"
                   class="btn btn-default btn-sm"
-                  ng-disabled="ctrl.isConfingVisible"
-                  ng-click="ctrl.showConfig()">
+                  data-toggle="collapse"
+                  data-target="#config">
             <span class="glyphicon glyphicon-cog"></span>
           </button>
         </div>
@@ -57,11 +57,10 @@
       </div>
     </div>
   </div>
-  <div class="row" ng-show="ctrl.isConfingVisible">
+  <div class="row collapse" id="config" ng-class="{success: ctrl.getTeam().allVoted, danger: !ctrl.getTeam().allVoted}">
     <div class="col-md-1"></div>
     <div class="col-md-11">
-      <form ng-submit="ctrl.setChoices()">
-        <span class="glyphicon glyphicon-cog"></span>:
+      <form class="form-inline" ng-submit="ctrl.setChoices()">
         <input type="text"
                id="conf"
                ng-model="ctrl.choisesAsString"
@@ -72,4 +71,5 @@
       </form>
     </div>
   </div>
+  <div class="row"></div>
 </div>

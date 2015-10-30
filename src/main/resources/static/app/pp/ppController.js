@@ -25,9 +25,7 @@
         vm.isVoteMax = isVoteMax;
         vm.cleanVotes = cleanVotes;
         vm.setChoices = setChoices;
-        vm.showConfig = showConfig;
         vm.choisesAsString = "";
-        vm.isConfingVisible = false;
 
         //WebSocket
         var ws = apiService.getWs($routeParams.team);
@@ -67,11 +65,7 @@
 
         function setChoices() {
             apiService.setChoices(getTeam().name, vm.choisesAsString.split("|"));
-            vm.isConfingVisible = false;
-        }
-
-        function showConfig() {
-            vm.isConfingVisible = true;
+            $('#config').collapse('hide');
         }
 
         function getNbVotes(choice) {
