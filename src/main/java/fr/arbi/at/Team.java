@@ -47,5 +47,10 @@ public class Team {
         }
         lastAction = Action.CLEAN_VOTES;
     }
+    
+    public void updateChoices(String[] choices) {
+        this.choices = choices;
+        lastAction = Action.CONFIG;
+    }
 
 }

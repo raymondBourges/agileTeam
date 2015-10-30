@@ -60,7 +60,7 @@ public class ApiController {
 
     @RequestMapping(value="/{teamName}/set-choices", method=RequestMethod.POST)
     void setChoices(@PathVariable String teamName, @RequestBody String[] choices, HttpServletRequest req) {
-        teams.getTeam(teamName).setChoices(choices);
+        teams.getTeam(teamName).updateChoices(choices);
         updateTeanForWs(teamName, req);
     }
 
