@@ -35,12 +35,9 @@
             parseTeam(getTeam());
             vm.choisesAsString = getTeam().choices.join('|');
         });
-
-        init();
-
-        function init() {
+        ws.onOpen(function() {
             apiService.sendDev($routeParams.team, $routeParams.dev, false, -1);
-        }
+        });
 
         function getDevs() {
             return vm.message.data.developers;
