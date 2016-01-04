@@ -1,31 +1,28 @@
-(function () {
-    'use strict';
-
-    angular
-        .module('homeController', [])
-        .controller('HomeCtrl', HomeCtrl);
-
-    HomeCtrl.$inject = [
-        '$location'
-    ];
-    function HomeCtrl($location) {
-        var vm = this;
-        vm.model = {
-            team:"",
-            dev:""
-        };
-        vm.go = go;
-        vm.isFormOk = isFormOk;
-
-        function go() {
-            if (isFormOk()  ) {
-                $location.path(vm.model.team + "/" + vm.model.dev);
+/**
+ * Created by bourges on 04/01/16.
+ */
+///<reference path="../app.ts"/>
+var Home;
+(function (Home) {
+    var HomeController = (function () {
+        function HomeController($location) {
+            this.locationService = $location;
+            this.model = {
+                team: "",
+                dev: ""
+            };
+        }
+        HomeController.prototype.go = function () {
+            if (this.isFormOk()) {
+                this.locationService.path(this.model.team + "/" + this.model.dev);
             }
-        }
-
-        function isFormOk() {
-            return vm.model.team.length > 0 && vm.model.dev.length > 0
-        }
-
-    }
-})();
+        };
+        HomeController.prototype.isFormOk = function () {
+            return this.model.team.length > 0 && this.model.dev.length > 0;
+        };
+        HomeController.$inject = ['$location'];
+        return HomeController;
+    })();
+    app.MyApp.controller('HomeController', HomeController);
+})(Home || (Home = {}));
+//# sourceMappingURL=homeController.js.map

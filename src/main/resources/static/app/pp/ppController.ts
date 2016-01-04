@@ -2,12 +2,21 @@
  * Created by bourges on 04/01/16.
  */
 ///<reference path="../app.ts"/>
-var pp;
-(function (pp) {
-    var PpController = (function () {
-        function PpController($routeParams, apiService, $scope) {
-            var _this = this;
-            this.message = { data: { name: "", developers: [], votes: [], allVoted: false, choices: [] } };
+
+module pp {
+
+    class PpController {
+        private message:service.Message;
+        private choisesAsString:String;
+        private currentTeam;
+        private currentDev;
+        private apiService;
+        private $scope;
+        private webSocketService: WebSocketService;
+
+        static $inject = ['$routeParams', 'ApiService', '$scope'];
+        constructor($routeParams:angular.route.IRouteParamsService, apiService:service.ApiService, $scope:ng.IScope) {
+            this.message = {data: {name: "", developers: [], votes: [], allVoted: false, choices: []}};
             this.choisesAsString = "";
             this.currentTeam = $routeParams['team'];
             this.currentDev = $routeParams['dev'];
@@ -15,61 +24,72 @@ var pp;
             this.$scope = $scope;
             //WebSocket
             this.webSocketService = apiService.getWs(this.currentTeam);
-            this.webSocketService.onMessage(function (mess) { return _this.onMessageCallBack(mess); });
-            this.webSocketService.onOpen(function () { return _this.onOpenCallBack(); });
+            this.webSocketService.onMessage(mess => this.onMessageCallBack(mess));
+            this.webSocketService.onOpen(() => this.onOpenCallBack());
         }
-        PpController.prototype.getDevs = function () {
+
+        public getDevs() {
             return this.message.data.developers;
-        };
-        PpController.prototype.getTeam = function () {
+        }
+
+        public getTeam() {
             return this.message.data;
-        };
-        PpController.prototype.vote = function (choice) {
+        }
+
+        public vote(choice) {
             this.apiService.sendDev(this.currentTeam, this.currentDev, true, choice);
-        };
-        PpController.prototype.deleteDev = function (dev) {
-            this.apiService.deleteDev(this.getTeam().name, dev.name);
-        };
-        PpController.prototype.cleanVotes = function () {
-            this.apiService.cleanVotes(this.getTeam().name);
-        };
-        PpController.prototype.setChoices = function () {
+        }
+
+        public deleteDev(dev) {
+            this.apiService.deleteDev(this.getTeam().name, dev.name)
+        }
+
+        public cleanVotes() {
+            this.apiService.cleanVotes(this.getTeam().name)
+        }
+
+        public setChoices() {
             this.apiService.setChoices(this.getTeam().name, this.choisesAsString.split("|"));
             $('#config').hide();
-        };
-        PpController.prototype.getNbVotes = function (choice) {
+        }
+
+        public getNbVotes(choice) {
             var ret = "?";
             if (this.getTeam().allVoted) {
                 ret = this.getTeam().votes[choice];
             }
             return ret;
-        };
-        PpController.prototype.isVoteMax = function (choice) {
+        }
+
+        public isVoteMax(choice) {
             var ret = true;
             for (var vote in this.getTeam().votes) {
                 var nbVote = this.getTeam().votes[vote];
                 ret = ret && nbVote <= this.getTeam().votes[choice];
             }
             return ret;
-        };
-        PpController.prototype.onMessageCallBack = function (mess) {
-            var _this = this;
+        }
+
+        private onMessageCallBack(mess) {
             this.message.data = JSON.parse(mess.data);
-            this.getDevs().map(function (dev) { return _this.parseDev(dev); });
+            this.getDevs().map(dev => this.parseDev(dev));
             this.parseTeam(this.getTeam());
             this.choisesAsString = this.getTeam().choices.join('|');
-        };
-        PpController.prototype.onOpenCallBack = function () {
+        }
+
+        private onOpenCallBack() {
             this.apiService.sendDev(this.currentTeam, this.currentDev, false, -1);
-        };
-        PpController.prototype.parseDev = function (dev) {
+        }
+
+        private parseDev(dev) {
             dev.isMe = false;
             if (dev.name == this.currentDev) {
                 dev.isMe = true;
             }
             return dev;
-        };
-        PpController.prototype.parseTeam = function (team) {
+        }
+
+        private parseTeam(team) {
             team.allVoted = true;
             team.votes = {};
             team.choices.forEach(function (choice) {
@@ -86,10 +106,9 @@ var pp;
                 this.$scope.$broadcast('timer-stop');
             }
             return team;
-        };
-        PpController.$inject = ['$routeParams', 'ApiService', '$scope'];
-        return PpController;
-    })();
+        }
+
+    }
+
     app.MyApp.controller('PpController', PpController);
-})(pp || (pp = {}));
-//# sourceMappingURL=ppController.js.map
+}
