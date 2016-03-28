@@ -17,48 +17,57 @@ module service {
 
     export class ApiService {
 
-        private baseUrl;
-        private baseHttpUrl;
-        private baseWsUrl;
         private httpService;
         private webSocketService: WebSocketService;
 
         static $inject = ["$http", "$location", "$websocket"];
-        constructor($http: ng.IHttpService, $location: ng.ILocationService, $websocket: WebSocketService) {
-            this.baseUrl = "://"
-                + $location.host() + ':'
-                + $location.port()
-//                    + 8080
-                + "/";
-            this.baseHttpUrl = $location.protocol() + this.baseUrl + "api/v1/";
-            this.baseWsUrl = "ws" + this.baseUrl + "team?teamName=";
+        constructor($http: ng.IHttpService, private $location: ng.ILocationService, $websocket: WebSocketService) {
             this.httpService = $http;
             this.webSocketService = $websocket;
         }
 
-        sendDev(teamName, devName, voted, vote) {
+        sendDev(pathPrefix, teamName, devName, voted, vote) {
             var data = {
                 name: devName,
                 voted: voted,
                 vote: vote
             };
-            this.httpService.put(this.baseHttpUrl + teamName + "/" + devName, data)
+            this.httpService.put(this.getBaseHttpUrl(pathPrefix) + teamName + "/" + devName, data)
         }
 
-        deleteDev(teamName, devName) {
-            this.httpService.delete(this.baseHttpUrl + teamName + "/" + devName)
+        deleteDev(pathPrefix, teamName, devName) {
+            this.httpService.delete(this.getBaseHttpUrl(pathPrefix) + teamName + "/" + devName)
         }
 
-        cleanVotes(teamName) {
-            this.httpService.post(this.baseHttpUrl + teamName + "/clean-votes")
+        cleanVotes(pathPrefix, teamName) {
+            this.httpService.post(this.getBaseHttpUrl(pathPrefix) + teamName + "/clean-votes")
         }
 
-        setChoices(teamName, choices) {
-            this.httpService.post(this.baseHttpUrl + teamName + "/set-choices", choices)
+        setChoices(pathPrefix, teamName, choices) {
+            this.httpService.post(this.getBaseHttpUrl(pathPrefix) + teamName + "/set-choices", choices)
         }
 
-        getWs(team) {
-            return this.webSocketService(this.baseWsUrl + team);
+        getWs(pathPrefix, team) {
+            console.log('-->', this.getBaseWsUrl(pathPrefix));
+            return this.webSocketService(this.getBaseWsUrl(pathPrefix) + team);
+        }
+
+        private getBaseHttpUrl(pathPrefix:string) {
+            return this.$location.protocol() + this.getBaseUrl(pathPrefix) + "api/v1/";
+        }
+
+        private getBaseWsUrl(pathPrefix:any) {
+            var protocol = this.$location.protocol() == "http" ? "ws" : "wss";
+            return protocol + this.getBaseUrl(pathPrefix) + "team?teamName=";
+        }
+
+        private getBaseUrl(pathPrefix:string) {
+            var ret:string = "://"
+                + this.$location.host() + ':'
+                + this.$location.port()
+                + pathPrefix;
+//            ret = "://localhost:8080/";
+            return ret;
         }
 
     }

@@ -5,16 +5,17 @@
 var pp;
 (function (pp) {
     var PpController = (function () {
-        function PpController($routeParams, apiService, $scope) {
+        function PpController($routeParams, apiService, $scope, pathPrefix) {
             var _this = this;
+            this.apiService = apiService;
+            this.pathPrefix = pathPrefix;
             this.message = { data: { name: "", developers: [], votes: [], allVoted: false, choices: [] } };
             this.choisesAsString = "";
             this.currentTeam = $routeParams['team'];
             this.currentDev = $routeParams['dev'];
-            this.apiService = apiService;
             this.$scope = $scope;
             //WebSocket
-            this.webSocketService = apiService.getWs(this.currentTeam);
+            this.webSocketService = this.apiService.getWs(this.pathPrefix, this.currentTeam);
             this.webSocketService.onMessage(function (mess) { return _this.onMessageCallBack(mess); });
             this.webSocketService.onOpen(function () { return _this.onOpenCallBack(); });
         }
@@ -25,16 +26,17 @@ var pp;
             return this.message.data;
         };
         PpController.prototype.vote = function (choice) {
-            this.apiService.sendDev(this.currentTeam, this.currentDev, true, choice);
+            this.apiService.sendDev(this.pathPrefix, this.currentTeam, this.currentDev, true, choice);
         };
         PpController.prototype.deleteDev = function (dev) {
-            this.apiService.deleteDev(this.getTeam().name, dev.name);
+            this.apiService.deleteDev(this.pathPrefix, this.getTeam().name, dev.name);
         };
         PpController.prototype.cleanVotes = function () {
-            this.apiService.cleanVotes(this.getTeam().name);
+            this.apiService.cleanVotes(this.pathPrefix, this.getTeam().name);
+            console.log('==>' + this.$scope.rbo);
         };
         PpController.prototype.setChoices = function () {
-            this.apiService.setChoices(this.getTeam().name, this.choisesAsString.split("|"));
+            this.apiService.setChoices(this.pathPrefix, this.getTeam().name, this.choisesAsString.split("|"));
             $('#config').hide();
         };
         PpController.prototype.getNbVotes = function (choice) {
@@ -60,7 +62,7 @@ var pp;
             this.choisesAsString = this.getTeam().choices.join('|');
         };
         PpController.prototype.onOpenCallBack = function () {
-            this.apiService.sendDev(this.currentTeam, this.currentDev, false, -1);
+            this.apiService.sendDev(this.pathPrefix, this.currentTeam, this.currentDev, false, -1);
         };
         PpController.prototype.parseDev = function (dev) {
             dev.isMe = false;
@@ -87,9 +89,9 @@ var pp;
             }
             return team;
         };
-        PpController.$inject = ['$routeParams', 'ApiService', '$scope'];
+        PpController.$inject = ['$routeParams', 'ApiService', '$scope', 'pathPrefix'];
         return PpController;
-    })();
+    }());
     app.MyApp.controller('PpController', PpController);
 })(pp || (pp = {}));
 //# sourceMappingURL=ppController.js.map

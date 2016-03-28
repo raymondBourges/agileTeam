@@ -22,7 +22,7 @@ var Home;
         };
         HomeController.$inject = ['$location'];
         return HomeController;
-    })();
+    }());
     app.MyApp.controller('HomeController', HomeController);
 })(Home || (Home = {}));
 //# sourceMappingURL=homeController.js.map

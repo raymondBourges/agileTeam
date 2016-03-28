@@ -21,7 +21,12 @@ var app;
             when('/:team/:dev', {
             templateUrl: 'app/pp/pp.html',
             controller: 'PpController',
-            controllerAs: 'ctrl'
+            controllerAs: 'ctrl',
+            resolve: { pathPrefix: function () {
+                    var ret = window.location.pathname;
+                    return ret.replace(/index.html$/, '');
+                }
+            }
         }).
             otherwise({
             redirectTo: '/'

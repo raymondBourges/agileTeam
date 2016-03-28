@@ -16,7 +16,6 @@ module Home {
         private locationService;
 
         static $inject = ['$location'];
-
         constructor($location:ng.ILocaleService) {
             this.locationService = $location;
             this.model = {

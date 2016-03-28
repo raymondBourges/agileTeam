@@ -10,20 +10,19 @@ module pp {
         private choisesAsString:String;
         private currentTeam;
         private currentDev;
-        private apiService;
         private $scope;
         private webSocketService: WebSocketService;
 
-        static $inject = ['$routeParams', 'ApiService', '$scope'];
-        constructor($routeParams:angular.route.IRouteParamsService, apiService:service.ApiService, $scope:ng.IScope) {
+        static $inject = ['$routeParams', 'ApiService', '$scope', 'pathPrefix'];
+        constructor($routeParams:angular.route.IRouteParamsService, private apiService:service.ApiService, $scope:ng.IScope, private pathPrefix:string) {
+            
             this.message = {data: {name: "", developers: [], votes: [], allVoted: false, choices: []}};
             this.choisesAsString = "";
             this.currentTeam = $routeParams['team'];
             this.currentDev = $routeParams['dev'];
-            this.apiService = apiService;
             this.$scope = $scope;
             //WebSocket
-            this.webSocketService = apiService.getWs(this.currentTeam);
+            this.webSocketService = this.apiService.getWs(this.pathPrefix, this.currentTeam);
             this.webSocketService.onMessage(mess => this.onMessageCallBack(mess));
             this.webSocketService.onOpen(() => this.onOpenCallBack());
         }
@@ -37,19 +36,20 @@ module pp {
         }
 
         public vote(choice) {
-            this.apiService.sendDev(this.currentTeam, this.currentDev, true, choice);
+            this.apiService.sendDev(this.pathPrefix, this.currentTeam, this.currentDev, true, choice);
         }
 
         public deleteDev(dev) {
-            this.apiService.deleteDev(this.getTeam().name, dev.name)
+            this.apiService.deleteDev(this.pathPrefix, this.getTeam().name, dev.name)
         }
 
         public cleanVotes() {
-            this.apiService.cleanVotes(this.getTeam().name)
+            this.apiService.cleanVotes(this.pathPrefix, this.getTeam().name);
+            console.log('==>' + this.$scope.rbo);
         }
 
         public setChoices() {
-            this.apiService.setChoices(this.getTeam().name, this.choisesAsString.split("|"));
+            this.apiService.setChoices(this.pathPrefix, this.getTeam().name, this.choisesAsString.split("|"));
             $('#config').hide();
         }
 
@@ -78,7 +78,7 @@ module pp {
         }
 
         private onOpenCallBack() {
-            this.apiService.sendDev(this.currentTeam, this.currentDev, false, -1);
+            this.apiService.sendDev(this.pathPrefix, this.currentTeam, this.currentDev, false, -1);
         }
 
         private parseDev(dev) {
